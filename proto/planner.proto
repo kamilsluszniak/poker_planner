@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package planner;
+
+message NewPokerRequest {
+    string team_name = 1;
+    string team_size = 2;
+}
+
+message NewPokerResponse {
+    string error = 1;
+}
+
+service Poker {
+    rpc NewPoker (NewPokerRequest) returns (NewPokerResponse) {}
+}
