@@ -3,14 +3,36 @@ syntax = "proto3";
 package planner;
 
 message NewPokerRequest {
-    string team_name = 1;
-    string team_size = 2;
+    int32 team_size = 1;
 }
 
 message NewPokerResponse {
-    string error = 1;
+    string poker_id = 1;
+    string error = 2;
+}
+
+message GetPokerRequest {
+    string poker_id = 1;
+}
+
+message Vote {
+    string name = 1;
+    int32 note = 2;
+}
+
+message GetPokerResponse {
+    int32 team_size = 1;
+    repeated Vote votes = 2;
+    string error = 3;
+}
+
+message VotePokerRequest {
+    string poker_id = 1;
+    Vote vote = 2;
 }
 
 service Poker {
     rpc NewPoker (NewPokerRequest) returns (NewPokerResponse) {}
+    rpc GetPoker (GetPokerRequest) returns (GetPokerResponse) {}
+    rpc VotePoker (VotePokerRequest) returns (GetPokerResponse) {}
 }

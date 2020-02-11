@@ -15,6 +15,8 @@ module Planner
       self.service_name = 'planner.Poker'
 
       rpc :NewPoker, NewPokerRequest, NewPokerResponse
+      rpc :GetPoker, GetPokerRequest, GetPokerResponse
+      rpc :VotePoker, VotePokerRequest, GetPokerResponse
     end
 
     Stub = Service.rpc_stub_class

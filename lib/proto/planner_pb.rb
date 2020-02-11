@@ -6,11 +6,27 @@ require 'google/protobuf'
 Google::Protobuf::DescriptorPool.generated_pool.build do
   add_file("proto/planner.proto", :syntax => :proto3) do
     add_message "planner.NewPokerRequest" do
-      optional :team_name, :string, 1
-      optional :team_size, :string, 2
+      optional :team_size, :int32, 1
     end
     add_message "planner.NewPokerResponse" do
-      optional :error, :string, 1
+      optional :poker_id, :string, 1
+      optional :error, :string, 2
+    end
+    add_message "planner.GetPokerRequest" do
+      optional :poker_id, :string, 1
+    end
+    add_message "planner.Vote" do
+      optional :name, :string, 1
+      optional :note, :int32, 2
+    end
+    add_message "planner.GetPokerResponse" do
+      optional :team_size, :int32, 1
+      repeated :votes, :message, 2, "planner.Vote"
+      optional :error, :string, 3
+    end
+    add_message "planner.VotePokerRequest" do
+      optional :poker_id, :string, 1
+      optional :vote, :message, 2, "planner.Vote"
     end
   end
 end
@@ -18,4 +34,8 @@ end
 module Planner
   NewPokerRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("planner.NewPokerRequest").msgclass
   NewPokerResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("planner.NewPokerResponse").msgclass
+  GetPokerRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("planner.GetPokerRequest").msgclass
+  Vote = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("planner.Vote").msgclass
+  GetPokerResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("planner.GetPokerResponse").msgclass
+  VotePokerRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("planner.VotePokerRequest").msgclass
 end
