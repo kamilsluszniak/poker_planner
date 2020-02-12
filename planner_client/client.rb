@@ -19,10 +19,14 @@ planner_server = Planner::Poker::Stub.new("localhost:50051", :this_channel_is_in
 
 if mode == 'start'
     poker_id = planner_server.new_poker(Planner::NewPokerRequest.new(team_size: number)).poker_id
-    p "Poker started now. Poker id:"
-    p poker_id
+    print "Poker started now. Poker id:\n"
+    print poker_id + "\n"
 elsif mode == 'vote'
     resp = planner_server.vote_poker(Planner::VotePokerRequest.new(poker_id: poker_id, vote: {name: name, note: number.to_i}))
+    error = resp.error
+    if error.length > 0
+        abort(error)
+    end
     team_size = resp.team_size
     votes = resp.votes
     votes_count = votes.length

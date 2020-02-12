@@ -3,6 +3,7 @@ require 'mongo'
 Mongo::Logger.logger.level = ::Logger::FATAL
 
 class MongoResource
+    class ResourceNotFoundError < StandardError; end
     CLIENT_ADDR = '127.0.0.1:27017'
     DATABASE = 'planner'
 

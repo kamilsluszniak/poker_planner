@@ -14,10 +14,10 @@ class PokerServer < Planner::Poker::Service
 
     def get_poker(get_poker_request, _unused_call)
         poker_id = get_poker_request.poker_id
-        poker = Poker.new.find_poker(poker_id)
-        if poker
-            votes = poker[:votes].map {|k, v| {name: k, note: v} }
-            team_size = poker[:team_size]
+        result = Poker.new.find_poker(poker_id)
+        if result
+            votes = result[:votes].map {|k, v| {name: k, note: v} }
+            team_size = result[:team_size]
             Planner::GetPokerResponse.new(team_size: team_size, votes: votes, error: "")
         else
             Planner::GetPokerResponse.new(error: "Poker #{poker_id} not found")
@@ -28,14 +28,16 @@ class PokerServer < Planner::Poker::Service
         poker_id = vote_poker_request.poker_id
         vote_obj = vote_poker_request.vote
         poker_resource = Poker.new
-        result = poker_resource.vote(poker_id, {vote_obj.name => vote_obj.note})
-        poker = poker_resource.find_poker(poker_id)
-        if poker
+        begin
+            result = poker_resource.vote(poker_id, {vote_obj.name => vote_obj.note})
+            poker = poker_resource.find_poker(poker_id)
             votes = poker[:votes].map {|k, v| {name: k, note: v} }
             team_size = poker[:team_size]
             Planner::GetPokerResponse.new(team_size: team_size, votes: votes, error: "")
-        else
+        rescue MongoResource::ResourceNotFoundError
             Planner::GetPokerResponse.new(error: "Poker #{poker_id} not found")
+        rescue Poker::VotingClosedError
+            Planner::GetPokerResponse.new(error: "Voting fot poker #{poker_id} ended")
         end
     end
 end
