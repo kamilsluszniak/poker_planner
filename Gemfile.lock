@@ -2,7 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     bson (4.7.1)
-    google-protobuf (3.11.3)
+    google-protobuf (3.19.2)
     googleapis-common-protos-types (1.0.4)
       google-protobuf (~> 3.0)
     grpc (1.27.0)
